@@ -1,0 +1,216 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(rgba(255,255,255,0.14), rgba(255,255,255,0.14)), url('uploads/covers/harry2.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 90px;
+}
+
+.container {
+    max-width: 1400px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.2);
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.navbar-site {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(14px);
+    border-radius: 0 0 25px 25px;
+    padding: 0.85rem 1rem;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.navbar-site .navbar-brand {
+    color: #1d4ed8;
+    font-size: 1.35rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-site .navbar-brand:hover {
+    color: #1e40af;
+}
+
+.navbar-site .nav-link {
+    color: #475569;
+    margin-right: 0.4rem;
+    font-weight: 600;
+    padding: 0.55rem 0.8rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.navbar-site .nav-link:hover,
+.navbar-site .nav-link.active {
+    color: #ffffff;
+    background: #1d4ed8;
+}
+
+.navbar-site .navbar-toggler {
+    border: 1px solid rgba(59,130,246,0.4);
+}
+
+.navbar-site .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-site .dropdown-menu {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.15);
+}
+
+.book-card {
+    background: white;
+    border-radius: 15px;
+    padding: 0;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.2);
+}
+
+.book-cover-container {
+    width: 100%;
+    height: 300px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+}
+
+.book-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.book-author {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.book-card .card-body {
+    padding: 18px;
+    flex-grow: 1;
+}
+
+.status-badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+.bg-borrowed {
+    background: #f39c12;
+    color: white;
+}
+
+.bg-returned {
+    background: #27ae60;
+    color: white;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.table {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.detail-book-card {
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.detail-book-cover-container {
+    width: 100%;
+    height: 450px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.detail-book-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 15px;
+}
+
+.info-card {
+    background: #f8fafc;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,0.06);
+}
+
+.book-detail-title {
+    letter-spacing: 0.5px;
+}

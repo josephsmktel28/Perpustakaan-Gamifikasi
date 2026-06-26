@@ -12,10 +12,9 @@ if (file_exists($envFile)) {
     }
 }
 
-// Gunakan APP_ENV untuk mendeteksi apakah di Render atau Lokal
-$env = getenv('APP_ENV') ?: 'local';
-
-if ($env === 'production') {
+// Deteksi cerdas: jika DB_HOST ada di environment variable (di set di Render), 
+// maka otomatis kita anggap sedang berjalan di server (Production/Aiven).
+if (getenv('DB_HOST')) {
     // ==========================================
     // KONEKSI AIVEN (PRODUCTION DI RENDER)
     // ==========================================

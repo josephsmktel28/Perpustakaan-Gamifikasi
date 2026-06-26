@@ -1,4 +1,5 @@
 <?php
+// Cek apakah ada file .env (opsional, Render akan mengabaikan ini)
 $envFile = __DIR__ . '/../.env';
 if (file_exists($envFile)) {
     $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -11,19 +12,33 @@ if (file_exists($envFile)) {
     }
 }
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$user = getenv('DB_USERNAME') ?: 'root';
-$pass = getenv('DB_PASSWORD') ?: '';
-$db   = getenv('DB_DATABASE') ?: 'perpustakaan_gamifikasi';
-$port = getenv('DB_PORT') ?: 3306;
-$ssl_mode = getenv('MYSQL_ATTR_SSL_CA') ? true : false; // For mysqli we can initialize with ssl if needed
+// Gunakan APP_ENV untuk mendeteksi apakah di Render atau Lokal
+$env = getenv('APP_ENV') ?: 'local';
 
-$conn = mysqli_init();
-if(getenv('DB_HOST')) {
-    // If using external DB like Aiven, require SSL
+if ($env === 'production') {
+    // ==========================================
+    // KONEKSI AIVEN (PRODUCTION DI RENDER)
+    // ==========================================
+    $host = getenv('DB_HOST');
+    $user = getenv('DB_USERNAME');
+    $pass = getenv('DB_PASSWORD');
+    $db   = getenv('DB_DATABASE');
+    $port = getenv('DB_PORT');
+
+    $conn = mysqli_init();
     mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
     mysqli_real_connect($conn, $host, $user, $pass, $db, $port, NULL, MYSQLI_CLIENT_SSL);
 } else {
+    // ==========================================
+    // KONEKSI LOKAL (XAMPP)
+    // ==========================================
+    $host = "localhost";
+    $user = "root";
+    $pass = "";
+    $db   = "perpustakaan_gamifikasi";
+    $port = 3306;
+
+    $conn = mysqli_init();
     mysqli_real_connect($conn, $host, $user, $pass, $db, $port);
 }
 

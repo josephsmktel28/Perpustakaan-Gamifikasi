@@ -12,32 +12,21 @@ if (file_exists($envFile)) {
     }
 }
 
-// Deteksi cerdas: jika DB_HOST ada di environment variable (di set di Render), 
-// maka otomatis kita anggap sedang berjalan di server (Production/Aiven).
-if (getenv('DB_HOST')) {
-    // ==========================================
-    // KONEKSI AIVEN (PRODUCTION DI RENDER)
-    // ==========================================
-    $host = getenv('DB_HOST');
-    $user = getenv('DB_USERNAME');
-    $pass = getenv('DB_PASSWORD');
-    $db   = getenv('DB_DATABASE');
-    $port = getenv('DB_PORT');
+// Ambil konfigurasi dari Environment Variables (.env lokal atau Render Dashboard)
+$host = getenv('DB_HOST') ?: 'localhost';
+$user = getenv('DB_USERNAME') ?: 'root';
+$pass = getenv('DB_PASSWORD') ?: '';
+$db   = getenv('DB_DATABASE') ?: 'perpustakaan_gamifikasi';
+$port = getenv('DB_PORT') ?: 3306;
 
-    $conn = mysqli_init();
+$conn = mysqli_init();
+
+// Jika host bukan localhost/127.0.0.1 (berarti koneksi remote/Aiven), gunakan SSL
+if ($host !== 'localhost' && $host !== '127.0.0.1') {
     mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
     mysqli_real_connect($conn, $host, $user, $pass, $db, $port, NULL, MYSQLI_CLIENT_SSL);
 } else {
-    // ==========================================
-    // KONEKSI LOKAL (XAMPP)
-    // ==========================================
-    $host = "localhost";
-    $user = "root";
-    $pass = "";
-    $db   = "perpustakaan_gamifikasi";
-    $port = 3306;
-
-    $conn = mysqli_init();
+    // Jika lokal, jangan gunakan SSL
     mysqli_real_connect($conn, $host, $user, $pass, $db, $port);
 }
 

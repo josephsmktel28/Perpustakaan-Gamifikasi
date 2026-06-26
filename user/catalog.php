@@ -25,6 +25,7 @@ if(!empty($conditions)){
 }
 
 $buku = mysqli_query($conn, "SELECT * FROM buku $where ORDER BY judul ASC");
+$resultCount = mysqli_num_rows($buku);
 
 function resolveCoverPath($coverPath) {
     if(empty($coverPath)){
@@ -125,14 +126,18 @@ function resolveCoverPath($coverPath) {
             <a href="catalog.php?kategori=Non-Fiksi<?php echo $searchQuery !== '' ? '&q='.urlencode($searchQuery) : ''; ?>" class="btn btn-outline-primary btn-sm <?= $filterKategori === 'Non-Fiksi' ? 'active btn-primary' : '' ?>">Non-Fiksi</a>
         </div>
     </div>
-    <!-- <div class="row mb-3">
-        <div class="col-12">
-            <p class="text-muted mb-0">Menampilkan <?php echo mysqli_num_rows($buku); ?> buku<?php echo $filterKategori !== '' ? ' kategori <strong>'.$filterKategori.'</strong>' : ''; ?><?php echo $searchQuery !== '' ? ' untuk "'.htmlspecialchars($searchQuery).'"' : ''; ?>.</p>
+    <?php if($resultCount === 0){ ?>
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-warning text-center" role="alert">
+                    <strong>Notifikasi:</strong> Tidak ada buku yang cocok dengan pencarian Anda<?php echo $searchQuery !== '' ? ' untuk "'.htmlspecialchars($searchQuery).'"' : ''; ?>.
+                </div>
+            </div>
         </div>
-    </div> -->
+    <?php } ?>
 
     <div class="row">
-        <?php if(mysqli_num_rows($buku) > 0){ ?>
+        <?php if($resultCount > 0){ ?>
             <?php while($b = mysqli_fetch_assoc($buku)){ ?>
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card book-card h-100">
@@ -147,17 +152,10 @@ function resolveCoverPath($coverPath) {
                                 <span class="badge bg-light text-dark mb-3"><?php echo htmlspecialchars($b['kategori']); ?></span>
                             <?php } ?>
                             <p class="text-muted small mb-4"><?php echo !empty($b['deskripsi']) ? htmlspecialchars(substr($b['deskripsi'], 0, 100)).'...' : 'Deskripsi belum tersedia.'; ?></p>
-                            <!-- <a href="detail_buku.php?id=<?php echo $b['id_buku']; ?>" class="btn btn-outline-primary mt-auto">
-                                <i class="fas fa-info-circle me-2"></i>Lihat Detail
-                            </a> -->
                         </div>
                     </div>
                 </div>
             <?php } ?>
-        <?php } else { ?>
-            <div class="col-12 text-center py-5">
-                <p class="h5 text-muted">Tidak ada buku yang cocok dengan pencarian Anda.</p>
-            </div>
         <?php } ?>
     </div>
 </div>

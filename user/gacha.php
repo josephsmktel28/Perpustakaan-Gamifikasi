@@ -13,7 +13,17 @@ $id_user = $user['id'];
 $SPIN_COST = 20;
 $message = "";
 $reward_result = null;
-$current_points = intval($user['points']);
+
+// Refresh poin pengguna dari database agar halaman selalu menampilkan nilai terbaru
+$userQuery = mysqli_query($conn, "SELECT * FROM users WHERE id = '$id_user'");
+$userData = mysqli_fetch_assoc($userQuery);
+if($userData){
+    $current_points = intval($userData['points']);
+    $_SESSION['users'] = array_merge($_SESSION['users'], $userData);
+    $user = $_SESSION['users'];
+} else {
+    $current_points = intval($user['points']);
+}
 
 if(isset($_POST['spin'])){
     $userQuery = mysqli_query($conn, "SELECT points FROM users WHERE id = '$id_user'");
@@ -83,9 +93,25 @@ $history = mysqli_query($conn, "SELECT h.*, r.nama_hadiah, r.deskripsi, r.reward
     <title>Gacha Roulette - Perpustakaan Digital</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="../assets/notification.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+
+<div id="notificationModal" class="notification-modal">
+    <div class="notification-content gacha">
+        <button class="close-notification" onclick="closeNotification()">&times;</button>
+        <div class="notification-icon">🎉</div>
+        <div class="notification-title">Hadiah Gacha!</div>
+        <div class="notification-subtitle">Selamat! Hadiah Anda berhasil diklaim.</div>
+        <div class="points-display">
+            <div class="category-badge">Hadiah Gacha</div>
+            <div class="points-label">Poin Diterima</div>
+            <div class="points-number shimmer">+0 🎯</div>
+            <div class="book-title-notification">"Hadiah"</div>
+        </div>
+    </div>
+</div>
 
 <nav class="navbar navbar-expand-lg navbar-light navbar-site sticky-top">
     <div class="container">
@@ -227,6 +253,7 @@ $history = mysqli_query($conn, "SELECT h.*, r.nama_hadiah, r.deskripsi, r.reward
                                     <th>Point</th>
                                     <th>Biaya</th>
                                     <th>Waktu</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -238,11 +265,16 @@ $history = mysqli_query($conn, "SELECT h.*, r.nama_hadiah, r.deskripsi, r.reward
                                             <td>+<?php echo intval($h['awarded_points']); ?></td>
                                             <td>-<?php echo intval($h['cost_points']); ?></td>
                                             <td><?php echo htmlspecialchars($h['created_at']); ?></td>
+                                            <td>
+                                                <button type='button' class='btn btn-sm btn-warning btn-gacha-claim' data-hadiah="<?php echo htmlspecialchars($h['nama_hadiah'], ENT_QUOTES, 'UTF-8'); ?>" data-deskripsi="<?php echo htmlspecialchars($h['deskripsi'], ENT_QUOTES, 'UTF-8'); ?>" data-points="<?php echo intval($h['awarded_points']); ?>">
+                                                    Klaim
+                                                </button>
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                 <?php } else { ?>
                                     <tr>
-                                        <td colspan="5" class="text-center py-3">Belum ada riwayat gacha.</td>
+                                        <td colspan="6" class="text-center py-3">Belum ada riwayat gacha.</td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -255,5 +287,6 @@ $history = mysqli_query($conn, "SELECT h.*, r.nama_hadiah, r.deskripsi, r.reward
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/notification.js"></script>
 </body>
 </html>

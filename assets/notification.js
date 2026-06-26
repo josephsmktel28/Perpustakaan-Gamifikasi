@@ -1,5 +1,5 @@
 // Notification Modal Functions
-function showNotification(type, points, kategori, bookTitle) {
+function showNotification(type, points, subtitle, itemTitle) {
     const modal = document.getElementById('notificationModal');
     const notificationContent = document.querySelector('.notification-content');
     
@@ -8,17 +8,22 @@ function showNotification(type, points, kategori, bookTitle) {
     notificationContent.classList.add(type);
     
     // Update icon and title based on type
-    let icon, title, subtitle, badge;
+    let icon, title, badge;
     if (type === 'success') {
         icon = '📚';
         title = 'Pinjam Berhasil!';
-        subtitle = 'Selamat! Anda telah meminjam buku';
-        badge = `<div class="category-badge">${kategori || 'Buku'}</div>`;
+        subtitle = subtitle || 'Selamat! Anda telah meminjam buku';
+        badge = `<div class="category-badge">${itemTitle || 'Buku'}</div>`;
     } else if (type === 'return') {
         icon = '✨';
         title = 'Return Berhasil!';
-        subtitle = 'Terima kasih telah mengembalikan buku';
+        subtitle = subtitle || 'Terima kasih telah mengembalikan buku';
         badge = '<div class="category-badge">Bonus +20 Poin</div>';
+    } else if (type === 'gacha') {
+        icon = '🎉';
+        title = 'Hadiah Gacha!';
+        subtitle = subtitle || 'Selamat! Hadiah Anda berhasil diklaim.';
+        badge = '<div class="category-badge">Hadiah Gacha</div>';
     }
     
     // Update content
@@ -27,19 +32,19 @@ function showNotification(type, points, kategori, bookTitle) {
     document.querySelector('.notification-subtitle').innerHTML = subtitle;
     document.querySelector('.points-number').innerHTML = points;
     
-    // Update book title if provided
-    let bookTitleHTML = '';
-    if (bookTitle) {
-        bookTitleHTML = `<div class="book-title-notification">"${bookTitle}"</div>`;
+    // Update item title if provided
+    let itemTitleHTML = '';
+    if (itemTitle) {
+        itemTitleHTML = `<div class="book-title-notification">"${itemTitle}"</div>`;
     }
     
-    // Update badge and book title
+    // Update badge and item title
     const pointsDisplay = document.querySelector('.points-display');
     pointsDisplay.innerHTML = `
         ${badge}
         <div class="points-label">Poin Diterima</div>
         <div class="points-number shimmer">${points}+ 🎯</div>
-        ${bookTitleHTML}
+        ${itemTitleHTML}
     `;
     
     // Show modal with animation
@@ -109,7 +114,7 @@ function createStarAnimation() {
 }
 
 // Close modal when clicking outside
-document.addEventListener('DOMContentLoaded', function() {
+function initNotification() {
     const modal = document.getElementById('notificationModal');
     
     if (modal) {
@@ -125,7 +130,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeBtn) {
         closeBtn.addEventListener('click', closeNotification);
     }
-});
+    registerGachaClaimButtons();
+}
+
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initNotification);
+} else {
+    initNotification();
+}
+
+function showGachaReward(name, description, points) {
+    showNotification('gacha', points, description, name);
+}
+
+function registerGachaClaimButtons() {
+    const buttons = document.querySelectorAll('.btn-gacha-claim');
+    buttons.forEach((button) => {
+        button.addEventListener('click', function() {
+            const name = button.getAttribute('data-hadiah');
+            const description = button.getAttribute('data-deskripsi');
+            const points = parseInt(button.getAttribute('data-points'), 10) || 0;
+            showGachaReward(name, description, points);
+        });
+    });
+}
+
+window.showGachaReward = showGachaReward;
 
 // Sound effect (optional - uncomment if you want sound)
 function playNotificationSound() {

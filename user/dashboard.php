@@ -140,7 +140,7 @@ $total_return = $return_data['total'];
             <div class="card shadow">
                 <div class="card-body text-center py-4">
                     <h1 class="display-5 fw-bold text-primary mb-2">
-                        <i class="fas fa-book-open me-3"></i>Selamat Datang di Perpustakaan Digital
+                        <i class="fas fa-school me-3"></i>Selamat Datang di Perpustakaan Digital
                     </h1>
                     <p class="lead text-muted">Jelajahi, pinjam, dan tingkatkan perjalanan membaca Anda dengan gamifikasi!</p>
                 </div>
